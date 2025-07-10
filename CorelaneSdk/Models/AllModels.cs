@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace CorelaneSdk.Models
-{   
-
+{
+    #region UserApi
     // Generic API Response Wrapper
     public record ApiResponse<T>
     {
@@ -64,4 +64,52 @@ namespace CorelaneSdk.Models
         Phone,
         Authenticator
     }
+    #endregion
+
+    #region NotificationApi
+    public abstract class BaseEvent
+    {
+        public Guid ProjectId { get; set; }
+    }
+
+    public enum EventTypeEnum
+    {
+        Email,
+        Sms,
+        PushNotification,
+        InAppNotification,
+        TelegramMessage
+    }
+
+    public abstract class NotificationEvent : BaseEvent
+    {
+        public EventTypeEnum EventType { get; set; }
+        public string To { get; set; }
+        public string Body { get; set; }
+        public string Subject { get; set; }
+        public string? TemplateName { get; set; }
+        public bool UseTemplate { get; set; } = false;
+        public bool IsHtml { get; set; } = false;
+        public Dictionary<string, string> Parameters { get; set; } = new();
+    }
+
+    public class EmailMessageEvent : NotificationEvent
+    {
+        public EmailMessageEvent()
+        {
+
+            EventType = EventTypeEnum.Email;
+        }
+    }
+
+    public class TelegramMessageEvent : NotificationEvent
+    {
+        public TelegramMessageEvent()
+        {
+            EventType = EventTypeEnum.TelegramMessage;
+        }
+        public bool DisableNotification { get; set; } // If true, the message will be sent silently
+        public int? ReplyToMessageId { get; set; }
+    }
+    #endregion
 }
