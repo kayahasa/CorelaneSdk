@@ -20,7 +20,6 @@ namespace Corelane.Sdk
     public class CorelaneApiClient : ICorelaneApiClient
     {
         private readonly HttpClient _httpClient;
-
         public IUserApiClient UserApi { get; }
         public INotificationApiClient NotificationApi { get; }
 
