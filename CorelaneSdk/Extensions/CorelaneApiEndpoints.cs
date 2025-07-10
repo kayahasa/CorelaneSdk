@@ -29,104 +29,13 @@ public static class CorelaneApiEndpoints
             group.RequireAuthorization();
         }
 
-        // Map User endpoints
-        if (options.EnableUserEndpoints)
-        {
-            MapUserEndpoints(group, options);
-        }
-
-        // Map Notification endpoints
+        // Only map notification endpoints since user endpoints are disabled
         if (options.EnableNotificationEndpoints)
         {
             MapNotificationEndpoints(group, options);
         }
 
         return endpoints;
-    }
-
-    private static void MapUserEndpoints(RouteGroupBuilder group, CorelaneEndpointOptions options)
-    {
-        var userGroup = group.MapGroup("/users").WithTags("Users");
-
-        // Authentication endpoints
-        userGroup.MapPost("/login", LoginAsync)
-            .WithName("Login")
-            .WithSummary("Login with username and password")
-            .Produces<ApiResponse<LoginResponse>>();
-
-        userGroup.MapPost("/login-2fa", LoginWith2FaAsync)
-            .WithName("LoginWith2FA")
-            .WithSummary("Login with two-factor authentication")
-            .Produces<ApiResponse<LoginWithTwoFaResponse>>();
-
-        userGroup.MapPost("/refresh-token", RefreshTokenAsync)
-            .WithName("RefreshToken")
-            .WithSummary("Refresh authentication token")
-            .Produces<ApiResponse<bool>>();
-
-        userGroup.MapPost("/logout-all", LogoutFromAllDevicesAsync)
-            .WithName("LogoutFromAllDevices")
-            .WithSummary("Logout from all devices")
-            .Produces<ApiResponse<bool>>();
-
-        // Profile endpoints
-        userGroup.MapGet("/profile", GetUserProfileAsync)
-            .WithName("GetUserProfile")
-            .WithSummary("Get user profile information")
-            .Produces<ApiResponse<UserProfileInfoDto>>();
-
-        userGroup.MapPost("/change-password", ChangePasswordAsync)
-            .WithName("ChangePassword")
-            .WithSummary("Change user password")
-            .Produces<ApiResponse<bool>>();
-
-        // Email confirmation endpoints
-        userGroup.MapPost("/send-confirmation-email", SendConfirmationEmailAsync)
-            .WithName("SendConfirmationEmail")
-            .WithSummary("Send email confirmation")
-            .Produces<ApiResponse<bool>>();
-
-        userGroup.MapPost("/confirm-email", ConfirmEmailAsync)
-            .WithName("ConfirmEmail")
-            .WithSummary("Confirm email address")
-            .Produces<ApiResponse<bool>>();
-
-        // Password reset endpoints
-        userGroup.MapPost("/forgot-password", ForgotPasswordAsync)
-            .WithName("ForgotPassword")
-            .WithSummary("Send forgot password email")
-            .Produces<ApiResponse<bool>>();
-
-        userGroup.MapPost("/reset-password", ResetPasswordAsync)
-            .WithName("ResetPassword")
-            .WithSummary("Reset user password")
-            .Produces<ApiResponse<bool>>();
-
-        // Two-factor authentication endpoints
-        userGroup.MapGet("/2fa/status", GetTwoFactorStatusAsync)
-            .WithName("GetTwoFactorStatus")
-            .WithSummary("Get two-factor authentication status")
-            .Produces<ApiResponse<bool>>();
-
-        userGroup.MapPost("/2fa/setup", GetAuthenticatorSetupAsync)
-            .WithName("GetAuthenticatorSetup")
-            .WithSummary("Get authenticator setup information")
-            .Produces<ApiResponse<bool>>();
-
-        userGroup.MapPost("/2fa/enable", EnableTwoFactorAsync)
-            .WithName("EnableTwoFactor")
-            .WithSummary("Enable two-factor authentication")
-            .Produces<ApiResponse<List<string>>>();
-
-        userGroup.MapPost("/2fa/disable", DisableTwoFactorAsync)
-            .WithName("DisableTwoFactor")
-            .WithSummary("Disable two-factor authentication")
-            .Produces<ApiResponse<bool>>();
-
-        userGroup.MapPost("/2fa/toggle", ToggleTwoFactorAsync)
-            .WithName("ToggleTwoFactor")
-            .WithSummary("Toggle two-factor authentication")
-            .Produces<ApiResponse<bool>>();
     }
 
     private static void MapNotificationEndpoints(RouteGroupBuilder group, CorelaneEndpointOptions options)
@@ -136,212 +45,21 @@ public static class CorelaneApiEndpoints
         notificationGroup.MapPost("/email", SendEmailAsync)
             .WithName("SendEmail")
             .WithSummary("Send email notification")
-            .Produces<ApiResponse<bool>>();
+            .WithDescription("Sends an email notification using the configured email service")
+            .Accepts<EmailMessageEvent>("application/json")
+            .Produces<ApiResponse<bool>>(200)
+            .Produces<ProblemDetails>(400)
+            .Produces<ProblemDetails>(500);
 
         notificationGroup.MapPost("/telegram", SendTelegramMessageAsync)
             .WithName("SendTelegramMessage")
             .WithSummary("Send Telegram message")
-            .Produces<ApiResponse<bool>>();
+            .WithDescription("Sends a message via Telegram bot")
+            .Accepts<TelegramMessageEvent>("application/json")
+            .Produces<ApiResponse<bool>>(200)
+            .Produces<ProblemDetails>(400)
+            .Produces<ProblemDetails>(500);
     }
-
-    #region User Endpoint Handlers
-
-    private static async Task<IResult> LoginAsync(LoginWithPasswordRequest request, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.LoginAsync(request);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> LoginWith2FaAsync(LoginWithTwoFaRequest request, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.LoginWith2FaAsync(request);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> RefreshTokenAsync(RefreshTokenRequest request, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.RefreshTokenAsync(request);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> LogoutFromAllDevicesAsync(ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.LogoutFromAllDevicesAsync();
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> GetUserProfileAsync(ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.GetUserProfileAsync();
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> ChangePasswordAsync(ChangePasswordRequest request, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.ChangePasswordAsync(request);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> SendConfirmationEmailAsync([FromQuery] string email, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.SendConfirmationEmailAsync(email);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> ConfirmEmailAsync([FromQuery] string userId, [FromQuery] string code, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.ConfirmEmailAsync(userId, code);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> ForgotPasswordAsync([FromQuery] string email, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.ForgotPasswordAsync(email);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> ResetPasswordAsync(ResetPasswordRequest request, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.ResetPasswordAsync(request);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> GetTwoFactorStatusAsync(ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.GetTwoFactorStatusAsync();
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> GetAuthenticatorSetupAsync([FromQuery] string appName, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.GetAuthenticatorSetupAsync(appName);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> EnableTwoFactorAsync([FromQuery] string totp, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.EnableTwoFactorAsync(totp);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> DisableTwoFactorAsync(ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.DisableTwoFactorAsync();
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    private static async Task<IResult> ToggleTwoFactorAsync(ToggleTotpRequest request, ICorelaneApiClient corelaneApiClient)
-    {
-        try
-        {
-            var result = await corelaneApiClient.UserApi.ToggleTwoFactorAsync(request);
-            return Results.Ok(result);
-        }
-        catch (ApiException ex)
-        {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
-        }
-    }
-
-    #endregion
 
     #region Notification Endpoint Handlers
 
@@ -349,12 +67,47 @@ public static class CorelaneApiEndpoints
     {
         try
         {
+            // Validate the request
+            if (string.IsNullOrWhiteSpace(request.To))
+            {
+                return Results.BadRequest(new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = "Email recipient is required",
+                    StatusCode = 400
+                });
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Subject) && string.IsNullOrWhiteSpace(request.Body))
+            {
+                return Results.BadRequest(new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = "Email subject or body is required",
+                    StatusCode = 400
+                });
+            }
+
             var result = await corelaneApiClient.NotificationApi.SendEmailAsync(request);
             return Results.Ok(result);
         }
         catch (ApiException ex)
         {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
+            return Results.Problem(
+                detail: ex.Message,
+                statusCode: (int)ex.StatusCode,
+                title: "API Error",
+                type: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+            );
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(
+                detail: "An unexpected error occurred while sending the email",
+                statusCode: 500,
+                title: "Internal Server Error",
+                type: "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+            );
         }
     }
 
@@ -362,14 +115,50 @@ public static class CorelaneApiEndpoints
     {
         try
         {
+            // Validate the request
+            if (string.IsNullOrWhiteSpace(request.To))
+            {
+                return Results.BadRequest(new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = "Telegram recipient is required",
+                    StatusCode = 400
+                });
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Body))
+            {
+                return Results.BadRequest(new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = "Message body is required",
+                    StatusCode = 400
+                });
+            }
+
             var result = await corelaneApiClient.NotificationApi.SendTelegramMessageAsync(request);
             return Results.Ok(result);
         }
         catch (ApiException ex)
         {
-            return Results.Problem(ex.Message, statusCode: (int)ex.StatusCode);
+            return Results.Problem(
+                detail: ex.Message,
+                statusCode: (int)ex.StatusCode,
+                title: "API Error",
+                type: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+            );
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(
+                detail: "An unexpected error occurred while sending the Telegram message",
+                statusCode: 500,
+                title: "Internal Server Error",
+                type: "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+            );
         }
     }
+
     #endregion
 }
 

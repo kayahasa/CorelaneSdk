@@ -9,23 +9,30 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddCorelaneSDK(this IServiceCollection services, string apiKey)
     {
-        // This is the corrected line.
-        // The second generic argument must be the concrete implementation of the interface.
-        services.AddHttpClient<ICorelaneApiClient, CorelaneApiClient>((serviceProvider, client) =>
+        if (string.IsNullOrWhiteSpace(CorelaneSdkBaseUrl) || !Uri.IsWellFormedUriString(CorelaneSdkBaseUrl, UriKind.Absolute))
         {
-            if (string.IsNullOrWhiteSpace(CorelaneSdkBaseUrl) || !Uri.IsWellFormedUriString(CorelaneSdkBaseUrl, UriKind.Absolute))
-            {
-                throw new InvalidOperationException("The BaseUrl must be a valid, absolute URI.");
-            }
+            throw new InvalidOperationException("The BaseUrl must be a valid, absolute URI.");
+        }
 
-            if (string.IsNullOrWhiteSpace(apiKey))
-            {
-                throw new InvalidOperationException("ApiKey cannot be null or empty.");
-            }
+        if (string.IsNullOrWhiteSpace(apiKey))
+        {
+            throw new InvalidOperationException("ApiKey cannot be null or empty.");
+        }
 
+        // Register HttpClient with a name
+        services.AddHttpClient("CorelaneApiClient", client =>
+        {
             client.BaseAddress = new Uri(CorelaneSdkBaseUrl);
             client.DefaultRequestHeaders.Add("ApiKey", apiKey);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
+
+        // Register the CorelaneApiClient as a singleton or scoped service
+        services.AddScoped<ICorelaneApiClient>(serviceProvider =>
+        {
+            var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+            var httpClient = httpClientFactory.CreateClient("CorelaneApiClient");
+            return new CorelaneApiClient(httpClient);
         });
 
         return services;
