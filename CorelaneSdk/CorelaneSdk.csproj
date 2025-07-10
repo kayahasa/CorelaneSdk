@@ -23,7 +23,12 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
-
+  
+  <ItemGroup>
+  <None Include="README.md" Pack="true" PackagePath="\" />
+  <None Include="icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="9.0.0-preview.6.24327.7" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
