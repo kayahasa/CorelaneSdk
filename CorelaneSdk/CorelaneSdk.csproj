@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     
     <PackageId>Corelane.Sdk.Client</PackageId>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <Authors>Hasan Kaya, Ercan Sualp</Authors>
     <Company>Urasoft</Company>
     <Description>An official SDK for interacting with Corelane APIs.</Description>
@@ -23,16 +23,25 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
-  
+
   <ItemGroup>
-  <None Include="Extensions\ServiceCollectionExtensions.cs" />
-  <None Include="README.md" Pack="true" PackagePath="\" />
-  <None Include="icon.png" Pack="true" PackagePath="\" />
+    <None Include="Extensions\ServiceCollectionExtensions.cs" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
-  
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="9.0.0-preview.6.24327.7" />
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<!-- ASP.NET Core Framework References -->
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	  
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+	  
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Refit" Version="8.0.0" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+	<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
+	<PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
+	<PackageReference Include="System.Text.Json" Version="9.0.9" />
   </ItemGroup>
 
 </Project>
