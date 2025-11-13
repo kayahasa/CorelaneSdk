@@ -1,7 +1,29 @@
-﻿using CorelaneSdk.Enums.NotificationApi;
+﻿using CorelaneSdk.Enums.Common;
 using System.Text.Json.Serialization;
 
-namespace CorelaneSdk.Models.NotificationApi.GetUserPushNotifications;
+namespace CorelaneSdk.Models;
+
+public class NotificationMessage
+{
+    public NotificationMessage() { }
+    public NotificationMessage(string title, string body)
+    {
+        Title = title;
+        Body = body;
+    }
+    public string Title { get; set; }
+    public string Body { get; set; }
+}
+
+public class SendPushNotificationRequest
+{
+    public List<Guid> UserIds { get; set; } = new();
+    public required string Title { get; set; }
+    public required string Body { get; set; }
+    public string? Deeplink { get; set; } = null;
+    public required List<string> Tokens { get; set; }
+    public Dictionary<CorelaneLanguageEnum, NotificationMessage>? Translations { get; set; } = null;
+}
 
 public class Notification
 {
@@ -29,4 +51,13 @@ public class Notification
 
     [JsonPropertyName("createdAt")]
     public DateTime? CreatedAt { get; set; }
-    }
+}
+
+public enum EventTypeEnum
+{
+    Email,
+    Sms,
+    PushNotification,
+    InAppNotification,
+    TelegramMessage
+}

@@ -1,9 +1,6 @@
 ﻿using CorelaneSdk.Attributes;
 using CorelaneSdk.Enums.Core;
-using CorelaneSdk.Models.Core;
-using CorelaneSdk.Models.UserApi.Common;
-using CorelaneSdk.Models.UserApi.GetUserProfile;
-using CorelaneSdk.Models.UserApi.LoginWithPassword;
+using CorelaneSdk.Models;
 using CorelaneSdk.RefitClient;
 
 namespace CorelaneSdk.Clients;

@@ -1,8 +1,6 @@
 ﻿using CorelaneSdk.Attributes;
 using CorelaneSdk.Enums.Core;
-using CorelaneSdk.Models.Core;
-using CorelaneSdk.Models.NotificationApi.GetUserPushNotifications;
-using CorelaneSdk.Models.NotificationApi.SendPushNotification;
+using CorelaneSdk.Models;
 using CorelaneSdk.RefitClient;
 
 namespace CorelaneSdk.Clients;

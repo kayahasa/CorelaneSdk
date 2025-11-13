@@ -1,9 +1,6 @@
 ﻿using CorelaneSdk.Attributes;
 using CorelaneSdk.Enums.Core;
-using CorelaneSdk.Models.Core;
-using CorelaneSdk.Models.MobilePaymentApi.AppleServerNotification;
-using CorelaneSdk.Models.MobilePaymentApi.GoogleNotification;
-using CorelaneSdk.Models.MobilePaymentApi.VerifyReceipt;
+using CorelaneSdk.Models;
 using CorelaneSdk.RefitClient;
 
 namespace CorelaneSdk.Clients;

@@ -6,7 +6,7 @@ namespace CorelaneSdk.Clients;
 
 public interface ICorelaneFirebaseClient
 {
-    Task<Models.Core.ApiResponse<string>> UploadFilesToFirebaseAsync(IFormFile file, string path);
+    Task<Models.ApiResponse<string>> UploadFilesToFirebaseAsync(IFormFile file, string path);
 }
 
 public class CorelaneFirebaseClient : ICorelaneFirebaseClient
@@ -18,7 +18,7 @@ public class CorelaneFirebaseClient : ICorelaneFirebaseClient
         _corelaneFirebaseHttpClient = corelaneFirebaseHttpClient;
     }
 
-    public async Task<Models.Core.ApiResponse<string>> UploadFilesToFirebaseAsync(IFormFile file, string path)
+    public async Task<Models.ApiResponse<string>> UploadFilesToFirebaseAsync(IFormFile file, string path)
     {
         try
         {

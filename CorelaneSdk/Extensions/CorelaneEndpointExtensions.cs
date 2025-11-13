@@ -1,7 +1,7 @@
 ﻿using CorelaneSdk.Attributes;
 using CorelaneSdk.Clients;
 using CorelaneSdk.Enums.Core;
-using CorelaneSdk.Models.Core;
+using CorelaneSdk.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;

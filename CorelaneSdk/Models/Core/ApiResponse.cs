@@ -1,4 +1,4 @@
-﻿namespace CorelaneSdk.Models.Core;
+﻿namespace CorelaneSdk.Models;
 
 public class ApiResponse<T>
 {

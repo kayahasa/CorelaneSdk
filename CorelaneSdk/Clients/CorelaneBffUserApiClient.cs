@@ -2,19 +2,7 @@
 using CorelaneSdk.Enums.Common;
 using CorelaneSdk.Enums.Core;
 using CorelaneSdk.Enums.UserApi;
-using CorelaneSdk.Models.Core;
-using CorelaneSdk.Models.UserApi;
-using CorelaneSdk.Models.UserApi.Common;
-using CorelaneSdk.Models.UserApi.CreateFeedback;
-using CorelaneSdk.Models.UserApi.GetProjectAppVersion;
-using CorelaneSdk.Models.UserApi.GetProjectFaqs;
-using CorelaneSdk.Models.UserApi.GetProjectPolicy;
-using CorelaneSdk.Models.UserApi.GetUserProfile;
-using CorelaneSdk.Models.UserApi.IsWorkingTime;
-using CorelaneSdk.Models.UserApi.RefreshToken;
-using CorelaneSdk.Models.UserApi.SignInWithSmsOtp;
-using CorelaneSdk.Models.UserApi.SignUpWithPhoneNumber;
-using CorelaneSdk.Models.UserApi.UpdateUserProfile;
+using CorelaneSdk.Models;
 using CorelaneSdk.RefitClient;
 
 namespace CorelaneSdk.Clients;
