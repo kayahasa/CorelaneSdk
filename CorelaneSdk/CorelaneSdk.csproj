@@ -33,11 +33,10 @@
 	<!-- ASP.NET Core Framework References -->
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	  
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
-	  
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.3.0" />
-    <PackageReference Include="Refit" Version="8.0.0" />
+  <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />  
+  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+  <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.3.0" />
+  <PackageReference Include="Refit" Version="8.0.0" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
 	<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
 	<PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
