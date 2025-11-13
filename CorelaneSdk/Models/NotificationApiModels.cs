@@ -1,4 +1,5 @@
 ﻿using CorelaneSdk.Enums.Common;
+using CorelaneSdk.Enums.NotificationApi;
 using System.Text.Json.Serialization;
 
 namespace CorelaneSdk.Models;
@@ -51,13 +52,4 @@ public class Notification
 
     [JsonPropertyName("createdAt")]
     public DateTime? CreatedAt { get; set; }
-}
-
-public enum EventTypeEnum
-{
-    Email,
-    Sms,
-    PushNotification,
-    InAppNotification,
-    TelegramMessage
 }
