@@ -51,4 +51,13 @@ public interface ICorelaneBffUserApiHttpClient
 
     [Get("/api/v1/UserApi/GetAllUsers")]
     Task<Models.ApiResponse<PaginationResponse<List<UserProfile>>>> GetAllUsersAsync([Query] string? filter, [Query] string? orderBy, [Query] int? skip, [Query] int? top, [Query] string? includes);
+
+    [Post("/api/v1/UserApi/SignUpWithAnonymous")]
+    Task<Models.ApiResponse<LoginResponse>> SignUpWithAnonymousAsync([Body] SignUpWithAnonymousRequest request);
+
+    [Post("/api/v1/UserApi/SendSmsOtp")]
+    Task<Models.ApiResponse<string>> SendSmsOtpAsync([Body] SendSmsOtpRequest request);
+
+    [Post("/api/v1/UserApi/ChangeAuthorizationAsOtpLogin")]
+    Task<Models.ApiResponse<LoginResponse>> ChangeAuthorizationAsOtpLoginAsync([Body] SignInWithSmsOtpRequest request);
 }

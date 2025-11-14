@@ -45,6 +45,15 @@ public interface ICorelaneBffUserApiClient
     [CorelaneEndpoint("/CreateFeedback", HttpMethodEnum.POST, ApiTypeEnum.UserApi)]
     Task<ApiResponse<Feedback>> CreateFeedbackAsync(CreateFeedBackRequest request);
 
+    [CorelaneEndpoint("/SignUpWithAnonymous", HttpMethodEnum.POST, ApiTypeEnum.UserApi, true)]
+    Task<ApiResponse<LoginResponse>> SignUpWithAnonymousAsync(SignUpWithAnonymousRequest request);
+
+    [CorelaneEndpoint("/SendSmsOtp", HttpMethodEnum.POST, ApiTypeEnum.UserApi)]
+    Task<ApiResponse<string>> SendSmsOtpAsync(SendSmsOtpRequest request);
+
+    [CorelaneEndpoint("/ChangeAuthorizationAsOtpLogin", HttpMethodEnum.POST, ApiTypeEnum.UserApi)]
+    Task<ApiResponse<LoginResponse>> ChangeAuthorizationAsOtpLoginAsync(SignInWithSmsOtpRequest request);
+
     Task<ApiResponse<WorkingTime>> IsWorkingTimeAsync(string planName, DateTime? date);
 
     Task<ApiResponse<DateTime>> GetNextWorkingDateAsync(string planName);
@@ -134,5 +143,20 @@ public class CorelaneBffUserApiClient : ICorelaneBffUserApiClient
     public async Task<ApiResponse<PaginationResponse<List<UserProfile>>>> GetAllUsersAsync(string? filter, string? orderBy, int? skip, int? top, string? includes)
     {
         return await _corelaneUserApiHttpClient.GetAllUsersAsync(filter, orderBy, skip, top, includes);
+    }
+
+    public async Task<ApiResponse<LoginResponse>> SignUpWithAnonymousAsync(SignUpWithAnonymousRequest request)
+    {
+        return await _corelaneUserApiHttpClient.SignUpWithAnonymousAsync(request);
+    }
+
+    public async Task<ApiResponse<string>> SendSmsOtpAsync(SendSmsOtpRequest request)
+    {
+        return await _corelaneUserApiHttpClient.SendSmsOtpAsync(request);
+    }
+
+    public async Task<ApiResponse<LoginResponse>> ChangeAuthorizationAsOtpLoginAsync(SignInWithSmsOtpRequest request)
+    {
+        return await _corelaneUserApiHttpClient.ChangeAuthorizationAsOtpLoginAsync(request);
     }
 }

@@ -145,3 +145,15 @@ public class LoginResponse
     public DateTime? DateOfBirth { get; set; }
     public bool IsFirstLogin { get; set; }
 }
+
+public class SignUpWithAnonymousRequest
+{
+    public string? FcmToken { get; set; }
+    public string? Platform { get; set; }
+    public LanguageEnum? Language { get; set; }
+}
+
+public class SendSmsOtpRequest
+{
+    public string PhoneNumber { get; set; }
+}
