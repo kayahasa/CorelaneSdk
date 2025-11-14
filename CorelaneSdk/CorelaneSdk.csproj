@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     
     <PackageId>Corelane.Sdk.Client</PackageId>
-    <Version>1.0.8</Version>
+    <Version>1.0.10</Version>
     <Authors>Hasan Kaya, Ercan Sualp</Authors>
     <Company>Urasoft</Company>
     <Description>An official SDK for interacting with Corelane APIs.</Description>

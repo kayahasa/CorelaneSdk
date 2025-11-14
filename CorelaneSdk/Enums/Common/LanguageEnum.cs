@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace CorelaneSdk.Enums.Common;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum LanguageEnum
 {
     [Description("Türkçe")]
